@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import { GlobalStyle, Wrapper } from "./App.styles";
-import { Form, Row, Col, Button } from "react-bootstrap";
-import { QuestionsState } from "./API";
+import React, { useEffect, useState } from "react";
 import { fetchQuizQuestions } from "./API";
+// Components
+import QuestionCard from "./components/QuestionCard";
+// types
+import { QuestionsState } from "./API";
+// Styles
+import { GlobalStyle, Wrapper } from "./App.styles";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Form, Row, Col, Button } from "react-bootstrap";
 
 export type AnswerObject = {
   question: string;
@@ -12,6 +15,8 @@ export type AnswerObject = {
   correct: boolean;
   correctAnswer: string;
 };
+
+// const TOTAL_QUESTIONS = 10;
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -26,6 +31,17 @@ const App: React.FC = () => {
   const [qCategory, setQCategory] = useState("");
   const [qDifficulty, setQDifficulty] = useState("");
   const [qType, setQType] = useState("");
+  useEffect(() => {
+    if (
+      qNumber !== "" &&
+      qCategory !== "" &&
+      qDifficulty !== "" &&
+      qType !== ""
+    ) {
+      setStartB(false);
+    }
+  }, [qNumber, qCategory, qDifficulty, qType]);
+
   const startTrivia = async () => {
     setLoading(true);
     setGameOver(false);
@@ -41,34 +57,57 @@ const App: React.FC = () => {
     setNumber(0);
     setLoading(false);
   };
+
+  const checkAnswer = (e: any) => {
+    if (!gameOver) {
+      const answer = e.currentTarget.value;
+      const correct = questions[number].correct_answer === answer;
+      if (correct) setScore((prev) => prev + 1);
+      // Save the answer in the array for user answers
+      const answerObject = {
+        question: questions[number].question,
+        answer,
+        correct,
+        correctAnswer: questions[number].correct_answer,
+      };
+      setUserAnswers((prev) => [...prev, answerObject]);
+    }
+  };
+
+  const nextQuestion = () => {
+    // Move on to the next question if not the last question
+    const nextQ = number + 1;
+
+    if (nextQ === Number(qNumber)) {
+      setGameOver(true);
+      setNumber(0);
+    } else {
+      setNumber(nextQ);
+    }
+  };
   const handleSelectGategory = (event: any) => {
     console.log(event.target.value);
     setQCategory(event.target.value);
   };
+
   const handleSelectDifficulty = (event: any) => {
     console.log(event.target.value);
     setQDifficulty(event.target.value);
   };
+
   const handleSelectType = (event: any) => {
     console.log(event.target.value);
     setQType(event.target.value);
   };
-  useEffect(() => {
-    if (
-      qNumber !== "" &&
-      qCategory !== "" &&
-      qDifficulty !== "" &&
-      qType !== ""
-    ) {
-      setStartB(false);
-    }
-  }, [qNumber, qCategory, qDifficulty, qType]);
+
   return (
     <>
       <GlobalStyle />
       <Wrapper>
+        {/* {!gameOver ? (
+          <div> */}
         <h1>REACT QUIZ</h1>
-        {gameOver ? (
+        {gameOver /*|| userAnswers.length === Number(qNumber)*/ ? (
           <Form onSubmit={startTrivia}>
             <Row className="mb-4">
               <Form.Group as={Col} controlId="formGridCity">
@@ -81,6 +120,7 @@ const App: React.FC = () => {
                   }}
                 />
               </Form.Group>
+
               <Form.Group as={Col} controlId="formGridState">
                 <Form.Label className="q-label">Select Category</Form.Label>
                 <Form.Select
@@ -125,6 +165,7 @@ const App: React.FC = () => {
                   </option>
                 </Form.Select>
               </Form.Group>
+
               <Form.Group as={Col} controlId="formGridState">
                 <Form.Label className="q-label">Select Difficulty</Form.Label>
                 <Form.Select
@@ -162,9 +203,35 @@ const App: React.FC = () => {
             </Button>
           </Form>
         ) : null}
+        {!gameOver ? <p className="score">Score: {score}</p> : null}
+        {loading ? <p>Loading Questions...</p> : null}
+        {!loading && !gameOver && (
+          <QuestionCard
+            questionNr={number + 1}
+            totalQuestions={Number(qNumber)}
+            question={questions[number].question}
+            answers={questions[number].answers}
+            userAnswer={userAnswers ? userAnswers[number] : undefined}
+            callback={checkAnswer}
+          />
+        )}
+        {!gameOver &&
+        !loading &&
+        userAnswers.length === number + 1 &&
+        number !== Number(qNumber) ? (
+          <button className="next" onClick={nextQuestion}>
+            {number === Number(qNumber) - 1 ? "Done" : "Next Question"}
+          </button>
+        ) : null}
       </Wrapper>
     </>
   );
 };
 
 export default App;
+
+// ({number === Number(qNumber) ? (
+//   <button className="next" onClick={nextQuestion}>
+//   Done
+// </button>
+// ) : null})
