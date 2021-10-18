@@ -8,6 +8,7 @@ import { QuestionsState } from "./API";
 import { GlobalStyle, Wrapper } from "./App.styles";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Row, Col, Button } from "react-bootstrap";
+import Footer from "./components/Footer";
 
 export type AnswerObject = {
   question: string;
@@ -225,6 +226,7 @@ const App: React.FC = () => {
           </button>
         ) : null}
       </Wrapper>
+      <Footer />
     </>
   );
 };
