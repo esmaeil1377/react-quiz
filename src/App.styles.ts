@@ -55,4 +55,7 @@ h1 {
   max-width: 200px;
   color: black;
 }
+.q-label {
+    color: white;
+  }
 `;

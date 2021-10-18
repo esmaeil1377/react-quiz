@@ -43,6 +43,10 @@ const App: React.FC = () => {
     console.log(event.target.value);
     setQCategory(event.target.value);
   };
+  const handleSelectDifficulty = (event: any) => {
+    console.log(event.target.value);
+    setQDifficulty(event.target.value);
+  };
   return (
     <>
       <GlobalStyle />
@@ -105,7 +109,19 @@ const App: React.FC = () => {
                   </option>
                 </Form.Select>
               </Form.Group>
-              
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label className="q-label">Select Difficulty</Form.Label>
+                <Form.Select
+                  defaultValue="Choose..."
+                  onChange={handleSelectDifficulty}
+                >
+                  <option>Choose...</option>
+                  <option value="any">Any Difficulty</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </Form.Select>
+              </Form.Group>
             </Row>
             <Button
               disabled={startB}
