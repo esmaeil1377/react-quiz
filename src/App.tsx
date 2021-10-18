@@ -8,6 +8,7 @@ import { QuestionsState } from "./API";
 import { GlobalStyle, Wrapper } from "./App.styles";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Row, Col, Button } from "react-bootstrap";
+import Header from "./components/Header";
 
 export type AnswerObject = {
   question: string;
@@ -106,7 +107,7 @@ const App: React.FC = () => {
       <Wrapper>
         {/* {!gameOver ? (
           <div> */}
-        <h1>REACT QUIZ</h1>
+          <Header />
         {gameOver /*|| userAnswers.length === Number(qNumber)*/ ? (
           <Form onSubmit={startTrivia}>
             <Row className="mb-4">
