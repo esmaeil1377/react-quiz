@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { GlobalStyle, Wrapper } from "./App.styles";
@@ -53,6 +53,16 @@ const App: React.FC = () => {
     console.log(event.target.value);
     setQType(event.target.value);
   };
+  useEffect(() => {
+    if (
+      qNumber !== "" &&
+      qCategory !== "" &&
+      qDifficulty !== "" &&
+      qType !== ""
+    ) {
+      setStartB(false);
+    }
+  }, [qNumber, qCategory, qDifficulty, qType]);
   return (
     <>
       <GlobalStyle />
