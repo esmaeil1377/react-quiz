@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { GlobalStyle, Wrapper } from "./App.styles";
@@ -24,11 +24,50 @@ const App: React.FC = () => {
   const [qCategory, setQCategory] = useState("");
   const [qDifficulty, setQDifficulty] = useState("");
   const [qType, setQType] = useState("");
+  const startTrivia = async () => {
+    setLoading(true);
+    setGameOver(false);
+    const newQuestions = await fetchQuizQuestions(
+      Number(qNumber),
+      Number(qCategory),
+      qDifficulty,
+      qType
+    );
+    setQuestions(newQuestions);
+    setScore(0);
+    setUserAnswers([]);
+    setNumber(0);
+    setLoading(false);
+  };
   return (
     <>
       <GlobalStyle />
       <Wrapper>
       <h1>REACT QUIZ</h1>
+        {gameOver ? (
+          <Form onSubmit={startTrivia}>
+              <Row className="mb-4">
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label className="q-label">Question Number</Form.Label>
+                <Form.Control
+                  type="number"
+                  onChange={(e) => {
+                    setQNumber(e.target.value);
+                    // console.log(e.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Row>
+              <Button
+              disabled={startB}
+              variant="primary"
+              type="submit"
+              className="start"
+            >
+              Start
+            </Button>
+          </Form>
+        ) : null}
 
       </Wrapper>
     </>
