@@ -26,6 +26,10 @@ export const Wrapper = styled.div`
     text-align: center;
     margin: 20px;
   }
+
+  div {
+    margin-bottom: 0;
+  }
 `;
 
 type ButtonWrapperProps = {
