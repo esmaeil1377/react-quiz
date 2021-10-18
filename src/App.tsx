@@ -118,6 +118,7 @@ const App: React.FC = () => {
                     setQNumber(e.target.value);
                     // console.log(e.target.value);
                   }}
+                  min="0"
                 />
               </Form.Group>
 
