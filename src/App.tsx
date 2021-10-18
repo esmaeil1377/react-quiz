@@ -3,6 +3,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import { GlobalStyle, Wrapper } from "./App.styles";
 import { Form, Row, Col, Button } from "react-bootstrap";
+import { QuestionsState } from "./API";
+import { fetchQuizQuestions } from "./API";
 
 export type AnswerObject = {
   question: string;
@@ -46,6 +48,10 @@ const App: React.FC = () => {
   const handleSelectDifficulty = (event: any) => {
     console.log(event.target.value);
     setQDifficulty(event.target.value);
+  };
+  const handleSelectType = (event: any) => {
+    console.log(event.target.value);
+    setQType(event.target.value);
   };
   return (
     <>
@@ -120,6 +126,19 @@ const App: React.FC = () => {
                   <option value="easy">Easy</option>
                   <option value="medium">Medium</option>
                   <option value="hard">Hard</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label className="q-label">Select Type</Form.Label>
+                <Form.Select
+                  defaultValue="Choose..."
+                  onChange={handleSelectType}
+                >
+                  <option>Choose...</option>
+                  <option value="any">Any Type</option>
+                  <option value="multiple">Multiple Choice</option>
+                  <option value="boolean">True / False</option>
                 </Form.Select>
               </Form.Group>
             </Row>
